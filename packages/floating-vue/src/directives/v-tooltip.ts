@@ -26,6 +26,11 @@ export function getPlacement (options, modifiers) {
 export function getOptions (el, value, modifiers) {
   let options
   const type = typeof value
+  if(modifiers.ellipsis) {
+    if(el.offsetWidth < el.scrollWidth) {
+      el.style.backgroundColor = 'red'
+    }
+  }
   if (type === 'string') {
     options = { content: value }
   } else if (value && type === 'object') {
@@ -128,6 +133,9 @@ export function destroyTooltip (el) {
 
 export function bind (el, { value, modifiers }) {
   const options = getOptions(el, value, modifiers)
+  if(modifiers.ellipsis && el.offsetWidth > el.scrollWidth) {
+    destroyTooltip(el)
+  }
   if (!options.content || getDefaultConfig(options.theme || 'tooltip', 'disabled')) {
     destroyTooltip(el)
   } else {
